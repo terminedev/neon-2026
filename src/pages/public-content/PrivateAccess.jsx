@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Login from 'components/public-content/Login';
 import Register from 'components/public-content/Register';
+import { Link } from "react-router-dom";
 
 
 export default function PrivateAccess() {
@@ -10,6 +11,7 @@ export default function PrivateAccess() {
     return (
         <section>
             <h2>Bienvenido/a</h2>
+            <Link to={'/acerca-de'}>Saber más acerca del proyecto</Link>
 
             <button
                 type='button'
