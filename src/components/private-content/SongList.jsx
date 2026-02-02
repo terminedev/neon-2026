@@ -1,0 +1,66 @@
+import { useState, useMemo } from 'react';
+
+export default function SongList() {
+
+    const [songs, _setSongs] = useState([]);
+    const [sortingType, setSortingType] = useState('date-asc');
+
+    const sortedSongs = useMemo(() => {
+        return [...songs].sort((a, b) => {
+            switch (sortingType) {
+                case 'title-asc':
+                    return a.title.localeCompare(b.title);
+                case 'title-desc':
+                    return b.title.localeCompare(a.title);
+                case 'date-asc':
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                case 'date-desc':
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                default:
+                    return 0;
+            }
+        });
+    }, [songs, sortingType]);
+
+    return (
+        <section>
+            <h2>Mis canciones</h2>
+
+            {/* Controles de Ordenación */}
+            {
+                sortedSongs.length > 0 &&
+                < section >
+                    <label htmlFor="sort-select">Ordenamiento:</label>
+                    <select
+                        id="sort-select"
+                        value={sortingType}
+                        onChange={(e) => setSortingType(e.target.value)}
+                    >
+                        <option value="title-asc">Alfábeticamente (A-Z)</option>
+                        <option value="title-desc">Alfábeticamente Reverso (Z-A)</option>
+                        <option value="date-asc">Fecha antigua</option>
+                        <option value="date-desc">Fecha actual</option>
+                    </select>
+                </section>
+            }
+
+            {/* Renderizado de la lista */}
+            {
+                sortedSongs.length > 0 ? (
+                    <ul>
+                        {sortedSongs.map((song) => (
+                            <li key={song.idVideo}>
+                                <strong>{song.title}</strong> — <small>{song.author_name}</small>
+                                <img src={song.thumbnail_url} />
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>
+                        No hay canciones registradas.
+                    </p>
+                )
+            }
+        </section >
+    );
+};
