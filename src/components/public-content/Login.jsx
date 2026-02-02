@@ -1,6 +1,13 @@
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../../contexts/AuthProvider';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+
+    const { userLogin } = useAuth();
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -10,7 +17,16 @@ export default function Login() {
     } = useForm();
 
     const handleLoggedIn = (loginData) => {
-        console.log('Datos Login -->', loginData);
+
+        const { email, password } = loginData;
+
+        try {
+            setError(null);
+            userLogin({ email, password });
+            navigate('/');
+        } catch (error) {
+            setError(error.message)
+        }
     };
 
     return (
@@ -18,12 +34,12 @@ export default function Login() {
             <p>Login</p>
             {/* CORREO ELECTRÓNICO LOGIN */}
 
-            <label htmlFor='emailLogin'>Correo Electrónico:</label>
+            <label htmlFor='email'>Correo Electrónico:</label>
             <input
                 type="email"
                 placeholder="Introduce aquí tu correo electrónico"
-                id='emailLogin'
-                {...register("emailLogin", {
+                id='email'
+                {...register("email", {
                     required: "El correo es obligatorio",
 
                     // INTRODUCIR UNA VALIDACIÓN
@@ -39,12 +55,12 @@ export default function Login() {
 
             {/* CONTRASEÑA LOGIN */}
 
-            <label htmlFor='passwordLogin'>Contraseña:</label>
+            <label htmlFor='password'>Contraseña:</label>
             <input
                 type="password"
                 placeholder="********"
-                id="passwordLogin"
-                {...register("passwordLogin", {
+                id="password"
+                {...register("password", {
                     required: "La contraseña es obligatoria",
 
                     // INTRODUCIR UNA VALIDACIÓN
@@ -56,7 +72,7 @@ export default function Login() {
             />
             {/* {errors.passwordLogin && <span>{errors.passwordLogin.message}</span>} */}
 
-
+            {error && <p>{error}</p>}
             <button type="button" onClick={() => reset()}>Limpiar Campos</button>
             <button type="submit">Iniciar Sección</button>
         </form>

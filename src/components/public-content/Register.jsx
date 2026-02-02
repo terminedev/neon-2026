@@ -1,6 +1,13 @@
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../../contexts/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Register() {
+
+    const { registerNewUser } = useAuth();
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -10,7 +17,13 @@ export default function Register() {
     } = useForm();
 
     const handleRecord = (registerData) => {
-        console.log('Datos Registro -->', registerData);
+        try {
+            setError(null);
+            registerNewUser(registerData);
+            navigate('/');
+        } catch (error) {
+            setError(error.message)
+        }
     };
 
     return (
@@ -18,12 +31,12 @@ export default function Register() {
             <p>Registro</p>
             {/* CORREO ELECTRÓNICO REGISTRO */}
 
-            <label htmlFor='emailRegister'>Correo Electrónico:</label>
+            <label htmlFor='email'>Correo Electrónico:</label>
             <input
                 type="email"
                 placeholder="Introduce aquí tu correo electrónico"
-                id='emailRegister'
-                {...register("emailRegister", {
+                id='email'
+                {...register("email", {
                     required: "El correo es obligatorio",
 
                     // INTRODUCIR UNA VALIDACIÓN
@@ -39,12 +52,12 @@ export default function Register() {
 
             {/* CONTRASEÑA REGISTRO */}
 
-            <label htmlFor='passwordRegister'>Contraseña:</label>
+            <label htmlFor='password'>Contraseña:</label>
             <input
                 type="password"
                 placeholder="********"
-                id="passwordRegister"
-                {...register("passwordRegister", {
+                id="password"
+                {...register("password", {
                     required: "La contraseña es obligatoria",
 
                     // INTRODUCIR UNA VALIDACIÓN
@@ -56,7 +69,7 @@ export default function Register() {
             />
             {/* {errors.passwordLogin && <span>{errors.passwordLogin.message}</span>} */}
 
-
+            {error && <p>{error}</p>}
             <button type="button" onClick={() => reset()}>Limpiar Campos</button>
             <button type="submit">Registrarse</button>
         </form>
