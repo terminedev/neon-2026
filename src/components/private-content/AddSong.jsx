@@ -15,7 +15,21 @@ export default function AddSong() {
     } = useForm();
 
     const handleDddedMusic = (songData) => {
-        console.log('Datos Musica -->', songData);
+        const objFinal = {
+            author_name: YTOEobject.author_name,
+            author_url: YTOEobject.author_url,
+            thumbnail_url: songData.thumbnail_url,
+            title: songData.title,
+            idVideo: extractVideoID(urlYTLocal)
+        };
+
+        console.log('Datos Musica -->', objFinal);
+    };
+
+    const extractVideoID = (url) => {
+        const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[7].length === 11) ? match[7] : null;
     };
 
 
@@ -33,6 +47,7 @@ export default function AddSong() {
 
             setYTOEobject(data);
             console.log('Objeto OEmbed -->', data);
+            console.log('ID Video -->', extractVideoID(urlYTLocal));
         };
 
         getApiYT();
@@ -43,12 +58,10 @@ export default function AddSong() {
     useEffect(() => {
         reset({
             thumbnail_url: YTOEobject?.thumbnail_url,
-            thumbnail_width: YTOEobject?.thumbnail_width,
-            thumbnail_height: YTOEobject?.thumbnail_height,
             title: YTOEobject?.title,
-            html: YTOEobject?.html,
         });
     }, [YTOEobject, reset]);
+
 
     return (
         <>
@@ -60,7 +73,6 @@ export default function AddSong() {
                     type="text"
                     placeholder="https://www.youtube.com/watch?v=ZaFaxmaSSCU"
                     id='urlVideoTY'
-                    value={urlYTLocal}
                     onChange={(e) => setUrlYTLocal(e.target.value)}
                 />
             </form>
@@ -73,132 +85,73 @@ export default function AddSong() {
 
             {
                 YTOEobject &&
-                <form onSubmit={handleSubmit(handleDddedMusic)} noValidate>
+                <>
+                    <form onSubmit={handleSubmit(handleDddedMusic)} noValidate>
 
-                    {/* Datos Vídeo */}
-                    <fieldset>
-                        <legend>Datos Príncipales:</legend>
+                        {/* Datos Vídeo */}
+                        <fieldset>
+                            <legend>Datos Príncipales:</legend>
 
-                        <label htmlFor='title'>Título:</label>
-                        <input
-                            type="text"
-                            placeholder="Título Original del Vídeo"
-                            id='title'
-                            {...register("title", {
+                            <label htmlFor='title'>Título:</label>
+                            <input
+                                type="text"
+                                placeholder="Título Original del Vídeo"
+                                id='title'
+                                {...register("title", {
 
-                                // INTRODUCIR UNA VALIDACIÓN
-                                // validate: (value) => {
-                                //     const esValido = value.includes('@'); // Tu lógica aquí
-                                //     return esValido || "Formato de correo no válido";
-                                // }
+                                    // INTRODUCIR UNA VALIDACIÓN
+                                    // validate: (value) => {
+                                    //     const esValido = value.includes('@'); // Tu lógica aquí
+                                    //     return esValido || "Formato de correo no válido";
+                                    // }
 
-                            })}
-                        />
-                        {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
+                                })}
+                            />
+                            {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
+                        </fieldset>
+
+                        {/* Miniatura Vídeo */}
+                        <fieldset>
+                            <legend>Miniatura:</legend>
+
+                            <label htmlFor='thumbnail_url'>Imagen:</label>
+                            <input
+                                type="text"
+                                placeholder="Miniatura del Vídeo"
+                                id='thumbnail_url'
+                                {...register("thumbnail_url", {
+
+                                    // INTRODUCIR UNA VALIDACIÓN
+                                    // validate: (value) => {
+                                    //     const esValido = value.includes('@'); // Tu lógica aquí
+                                    //     return esValido || "Formato de correo no válido";
+                                    // }
+
+                                })}
+                            />
+                            {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
+                        </fieldset>
 
 
-                        {/* OBTENER EL ID DEL VÍDEO */}
-                        <label htmlFor='html'>ID Vídeo:</label>
-                        <input
-                            type="text"
-                            placeholder="Iframe Original del Vídeo"
-                            id='html'
-                            {...register("html", {
+                        <button type="button" onClick={() => {
+                            reset({
+                                thumbnail_url: YTOEobject?.thumbnail_url,
+                                title: YTOEobject?.title,
+                            });
+                        }}>Establecer Datos por Defecto</button>
+                        <button type="submit">Guardar Música</button>
+                    </form>
 
-                                // INTRODUCIR UNA VALIDACIÓN
-                                // validate: (value) => {
-                                //     const esValido = value.includes('@'); // Tu lógica aquí
-                                //     return esValido || "Formato de correo no válido";
-                                // }
-
-                            })}
-                        />
-                        {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
-                    </fieldset>
-
-
-                    {/* (Dirección / Nombre) Autor */}
-                    <fieldset>
-                        <legend>Copyright:</legend>
+                    {/* Sección no editable */}
+                    <section>
+                        <img src={YTOEobject.thumbnail_url} />
 
                         <p>Autor:</p>
                         <a href={YTOEobject.author_url} target="_blank" rel="noreferrer">
                             {YTOEobject.author_name}
                         </a>
-                    </fieldset>
-
-                    {/* Miniatura Vídeo */}
-                    <fieldset>
-                        <legend>Miniatura:</legend>
-
-                        <img src={YTOEobject.thumbnail_url} />
-
-                        <label htmlFor='thumbnail_url'>Imagen:</label>
-                        <input
-                            type="text"
-                            placeholder="Miniatura del Vídeo"
-                            id='thumbnail_url'
-                            {...register("thumbnail_url", {
-
-                                // INTRODUCIR UNA VALIDACIÓN
-                                // validate: (value) => {
-                                //     const esValido = value.includes('@'); // Tu lógica aquí
-                                //     return esValido || "Formato de correo no válido";
-                                // }
-
-                            })}
-                        />
-                        {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
-
-
-                        <label htmlFor='thumbnail_width'>Ancho:</label>
-                        <input
-                            type="number"
-                            placeholder="Ancho Miniatura del Vídeo"
-                            id='thumbnail_width'
-                            {...register("thumbnail_width", {
-
-                                // INTRODUCIR UNA VALIDACIÓN
-                                // validate: (value) => {
-                                //     const esValido = value.includes('@'); // Tu lógica aquí
-                                //     return esValido || "Formato de correo no válido";
-                                // }
-
-                            })}
-                        />
-                        {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
-
-
-                        <label htmlFor='thumbnail_height'>Altura:</label>
-                        <input
-                            type="number"
-                            placeholder="Altura Miniatura del Vídeo"
-                            id='thumbnail_height'
-                            {...register("thumbnail_height", {
-
-                                // INTRODUCIR UNA VALIDACIÓN
-                                // validate: (value) => {
-                                //     const esValido = value.includes('@'); // Tu lógica aquí
-                                //     return esValido || "Formato de correo no válido";
-                                // }
-
-                            })}
-                        />
-                        {/* {errors.emailLogin && <span>{errors.emailLogin.message}</span>} */}
-                    </fieldset>
-
-
-                    <button type="button" onClick={() => {
-                        reset({
-                            thumbnail_url: YTOEobject?.thumbnail_url,
-                            thumbnail_width: YTOEobject?.thumbnail_width,
-                            thumbnail_height: YTOEobject?.thumbnail_height,
-                            title: YTOEobject?.title,
-                            html: YTOEobject?.html,
-                        });
-                    }}>Establecer Datos por Defecto</button>
-                    <button type="submit">Guardar Música</button>
-                </form>
+                    </section>
+                </>
             }
         </>
     );
