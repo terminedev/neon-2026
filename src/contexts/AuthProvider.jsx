@@ -128,8 +128,41 @@ export function AuthProvider({ children }) {
         }
     };
 
+    const removeSongFromPlaylist = (playlistId, songIdVideo) => {
+        if (user) {
+            setUser(prevUser => ({
+                ...prevUser,
+                playlist: prevUser.playlist.map(list => {
+                    // Buscamos la playlist correcta
+                    if (list.id === playlistId) {
+                        // Filtramos las canciones para quitar la que coincida con el ID
+                        return {
+                            ...list,
+                            songs: list.songs.filter(song => song.idVideo !== songIdVideo)
+                        };
+                    }
+                    return list;
+                })
+            }));
+        } else {
+            throw new Error('Usuario no autenticado');
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, registerNewUser, userLogin, addSong, addPlaylist, editSong, editPlaylist, deleteSong, deletePlaylist, addSongToPlaylist }}>
+        <AuthContext.Provider value={{
+            user,
+            registerNewUser,
+            userLogin,
+            addSong,
+            addPlaylist,
+            editSong,
+            editPlaylist,
+            deleteSong,
+            deletePlaylist,
+            addSongToPlaylist,
+            removeSongFromPlaylist
+        }}>
             {children}
         </AuthContext.Provider>
     );

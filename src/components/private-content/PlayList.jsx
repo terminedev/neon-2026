@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthProvider';
 import EditPlaylist from './EditPlaylist';
 import DeleteAction from 'components/private-content/DeleteAction';
+import PlaylistDetails from 'components/private-content/PlaylistDetails';
 
 export default function PlayList() {
     const { user } = useAuth();
@@ -13,6 +14,11 @@ export default function PlayList() {
     });
 
     const [showModalBorrable, setShowModalBorrable] = useState({
+        playlistData: null,
+        isOpen: false
+    });
+
+    const [showDetailsModal, setShowDetailsModal] = useState({
         playlistData: null,
         isOpen: false
     });
@@ -75,6 +81,13 @@ export default function PlayList() {
                             >
                                 Eliminar
                             </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowDetailsModal({ playlistData: playlist, isOpen: true })}
+                            >
+                                Ver Canciones ({playlist.songs ? playlist.songs.length : 0})
+                            </button>
                         </li>
                     ))}
                 </ul>
@@ -94,6 +107,13 @@ export default function PlayList() {
                     item={showModalBorrable.playlistData}
                     type="playlist"
                     closeModal={() => setShowModalBorrable({ playlistData: null, isOpen: false })}
+                />
+            )}
+
+            {showDetailsModal.isOpen && (
+                <PlaylistDetails
+                    playlistData={showDetailsModal.playlistData}
+                    closeModal={() => setShowDetailsModal({ playlistData: null, isOpen: false })}
                 />
             )}
         </section>
