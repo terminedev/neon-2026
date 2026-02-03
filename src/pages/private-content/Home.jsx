@@ -1,5 +1,8 @@
 import AddSong from 'components/private-content/AddSong';
 import AddPlaylist from 'components/private-content/AddPlaylist';
+import SongList from 'components/private-content/SongList';
+import PlayList from 'components/private-content/PlayList';
+
 import { useState } from 'react';
 
 export default function Home() {
@@ -28,6 +31,11 @@ export default function Home() {
 
             {inputModal === 'cancion' && <AddSong closeModal={() => setInputModal(null)} />}
             {inputModal === 'playlist' && <AddPlaylist closeModal={() => setInputModal(null)} />}
+
+            <hr />
+
+            <SongList />
+            <PlayList />
         </main>
     );
 }

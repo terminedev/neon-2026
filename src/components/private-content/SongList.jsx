@@ -1,12 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useAuth } from 'contexts/AuthProvider';
 
 export default function SongList() {
 
-    const [songs, _setSongs] = useState([]);
+    const { user } = useAuth();
     const [sortingType, setSortingType] = useState('date-asc');
 
     const sortedSongs = useMemo(() => {
-        return [...songs].sort((a, b) => {
+        if (!user?.songList) return [];
+
+        return [...user.songList].sort((a, b) => {
             switch (sortingType) {
                 case 'title-asc':
                     return a.title.localeCompare(b.title);
@@ -20,7 +23,7 @@ export default function SongList() {
                     return 0;
             }
         });
-    }, [songs, sortingType]);
+    }, [user.songList, sortingType]);
 
     return (
         <section>

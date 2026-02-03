@@ -19,7 +19,10 @@ export default function AddPlaylist({
     const handleRecord = (playlistData) => {
         try {
             setError(null);
-            addPlaylist(user.uid, playlistData);
+            addPlaylist(user.uid, {
+                id: crypto.randomUUID(),
+                ...playlistData
+            });
             closeModal();
         } catch (error) {
             setError(error.message)

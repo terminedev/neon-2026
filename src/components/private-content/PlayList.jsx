@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
+import { useAuth } from '../../contexts/AuthProvider';
 
 export default function PlayList() {
 
-    const [playlist, _setPlaylist] = useState([]);
+    const { user } = useAuth();
     const [sortingType, setSortingType] = useState('date-asc');
 
     const sortedPlaylist = useMemo(() => {
-        return [...playlist].sort((a, b) => {
+        return [...user.playlist].sort((a, b) => {
             switch (sortingType) {
                 case 'title-asc':
                     return a.recordTitlePlayList.localeCompare(b.recordTitlePlayList);
@@ -20,7 +21,7 @@ export default function PlayList() {
                     return 0;
             }
         });
-    }, [playlist, sortingType]);
+    }, [user.playlist, sortingType]);
 
     return (
         <section>
