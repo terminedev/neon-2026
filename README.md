@@ -26,7 +26,7 @@
 ###  Estas funciones cubren el **CRUD**:
 
 * **Gestión de Videos (Entidad 1):**
-* Agregar video al sistema (Create).
+✓ * Agregar video al sistema (Create). 
 * Listar todos los videos almacenados (Read).
 * Editar información del video (Update).
 * Eliminar video del sistema (Delete).

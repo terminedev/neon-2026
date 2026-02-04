@@ -2,8 +2,6 @@ import { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
-const listaUsuariosRegistrados = [];
-
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
 
