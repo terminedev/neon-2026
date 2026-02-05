@@ -41,7 +41,7 @@
 ✓ * Editar playlist (Update).
 ✓ * Listar playlists creadas (Read).
 * Ver detalle de una playlist (canciones dentro).
-* Eliminar playlist (Delete).
+✓ * Eliminar playlist (Delete).
 
 
 * **Gestión de Contenido en Playlist:**

@@ -12,7 +12,7 @@ export default function DeletePlaylist({ playlist_id, onClose }) {
     };
 
     return (
-        <dialog>
+        <dialog open>
 
             <h3>¿Estás seguro?</h3>
             <p>Esta acción no se puede deshacer.</p>
