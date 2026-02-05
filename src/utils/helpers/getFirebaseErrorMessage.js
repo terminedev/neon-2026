@@ -60,6 +60,17 @@ export const getFirebaseErrorMessage = (errorCode) => {
         case 'unavailable':
             return 'El servicio está temporalmente no disponible.';
 
+        // --- CERRAR SESIÓN / SESIÓN EXPIRADA ---
+
+        case 'auth/no-current-user':
+            return 'No hay ninguna sesión activa actualmente.';
+
+        case 'auth/user-token-expired':
+            return 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.';
+
+        case 'auth/user-signed-out':
+            return 'El usuario ha cerrado la sesión.';
+
         // --- DEFAULT (Fallback) ---
         default:
             console.warn('Error de Firebase no controlado:', errorCode);

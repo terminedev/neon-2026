@@ -1,39 +1,61 @@
 import { useState } from 'react';
+import { useAuth } from 'contexts/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 
 export default function Logout() {
-    const { logout, user } = useAuth();
+
     const [showMenu, setShowMenu] = useState(false);
 
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const [asynObject, setAsynObject] = useState({
+        isLoading: false,
+        error: null
+    });
+
     const handleLogout = async () => {
+
         try {
-            await logout(); // <-- Función Firebase
+            setAsynObject({ isLoading: true, error: null });
+
+            const data = await logout();
+            if (data.success) navigate('/acceder');
+
         } catch (error) {
+            setAsynObject({
+                isLoading: false,
+                error: error
+            });
         }
     };
 
-    const toggleMenu = () => {
-        setShowMenu(!showMenu);
-    };
 
     return (
         <section>
 
             {/* Nombre del usuario (Clickable) */}
             <button
-                onClick={toggleMenu}
+                onClick={() => setShowMenu(prevState => !prevState)}
             >
-                <p>
-                    Hola, nombre usuario▾
-                </p>
+                Icóno log
             </button>
 
             {/* Menú desplegable (Renderizado condicional) */}
             {showMenu && (
                 <dialog open
                 >
-                    <button onClick={handleLogout}>
-                        Cerrar Sesión x
-                    </button>
+                    {
+                        asynObject.isLoading
+                            ? <p>Saliendo...</p>
+                            :
+                            <button onClick={handleLogout}>
+                                Cerrar Sesión x
+                            </button>
+                    }
+
+                    {asynObject.error && <p>*{getFirebaseErrorMessage(asynObject.error.code)}</p>}
                 </dialog>
             )}
         </section>
