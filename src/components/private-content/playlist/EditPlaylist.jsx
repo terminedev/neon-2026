@@ -1,35 +1,57 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-export default function AddPlaylist() {
+export default function EditPlaylist() {
+    const { playlist_id } = useParams();
 
     const {
         register,
         handleSubmit,
-        watch,
         reset,
-        formState: { errors },
+        watch,
+        formState: { errors }
     } = useForm({
         defaultValues: {
             name: '',
             cover: '',
             description: '',
-            color: '#00FFFF',
-            video_ids: [],
+            color: '',
         },
     });
 
     const watchedCover = watch('cover');
 
-    const handleAggregate = async (data) => {
+    useEffect(() => {
+
+        const getPlaylistDatabase = async () => {
+
+            try {
+                const data = await getPlaylistDB(playlist_id); // <-- Función Firebase 
+
+                if (!data) return console.warn(`No se encontró playlist con id: ${playlist_id}`);
+
+                reset({
+                    name: data.name,
+                    cover: data.cover,
+                    description: data.description,
+                    color: data.color,
+                });
+
+            } catch (error) {
+
+            }
+        };
+
+        if (playlist_id && playlist_id.trim() !== '') getPlaylistDatabase();
+    }, [playlist_id]);
+
+
+    const handleChange = async (newData) => {
+
         try {
-            console.log('Objeto a agregar -->', data);
-
-            await addPlaylistDB({
-                user_id: user.uid, // <-- AuthContext;
-                video_ids: [],
-                ...data
-            });  // <-- Función Firebase 
-
+            console.log('Nuevos Datos -->', newData);
+            updatePlaylistDB(newData); // <-- Función Firebase 
         } catch (error) {
         } finally {
         }
@@ -37,9 +59,9 @@ export default function AddPlaylist() {
 
     return (
         <section>
+            <h2>Editar Información de la Playlist:</h2>
 
-            <h2>Crear nueva Playlist:</h2>
-            <form onSubmit={handleSubmit(handleAggregate)}>
+            <form onSubmit={handleSubmit(handleChange)}>
 
                 <label htmlFor='name'>Nombre:</label>
                 <input
@@ -66,7 +88,7 @@ export default function AddPlaylist() {
                     {...register('color')}
                 />
 
-                <label >Notas Personales (Descripción):</label>
+                <label>Notas Personales (Descripción):</label>
                 <textarea
                     {...register('description')}
                     rows="4"
@@ -74,10 +96,10 @@ export default function AddPlaylist() {
                 />
 
                 <button type="button" onClick={() => reset()}>
-                    Limpiar Datos
+                    Restaurar Datos
                 </button>
                 <button type="submit">
-                    Guardar Video
+                    Guardar Cambios
                 </button>
             </form>
         </section>

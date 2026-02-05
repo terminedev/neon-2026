@@ -16,11 +16,12 @@
 
 
 2. **Colección `playlists`:**
-* `playlist_id`
-* `user_id`
+* `playlist_id` (ID del documento, autogenerado)
+* `user_id` (ID del usuario dueño)
 * `name` (Nombre Playlist)
 * `cover` (Portada Playlist)
-* `description`
+* `description`(Opcional, tus notas personales)
+* `color` 
 * `video_ids` (Array de strings con los IDs de los videos que pertenecen a esta lista).
 
 

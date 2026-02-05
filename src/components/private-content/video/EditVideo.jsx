@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-export default function VideoEditForm() {
+export default function EditVideo() {
     const { video_id } = useParams();
 
     const {

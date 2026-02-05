@@ -64,7 +64,10 @@ export default function AddVideo() {
     const handleAggregate = async (data) => {
         try {
             console.log('Objeto a agregar -->', data);
-            // await addVideoDB(data);  // <-- Función Firebase 
+            await addVideoDB({
+                user_id: user.uid, // <-- AuthContext;
+                ...data
+            }) // <-- Función Firebase 
         } catch (error) {
         } finally {
         }
