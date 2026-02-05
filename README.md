@@ -39,7 +39,7 @@
 * **Gestión de Playlists (Entidad 2):**
 ✓ * Crear nueva playlist (Create).
 ✓ * Editar playlist (Update).
-* Listar playlists creadas (Read).
+✓ * Listar playlists creadas (Read).
 * Ver detalle de una playlist (canciones dentro).
 * Eliminar playlist (Delete).
 
