@@ -9,25 +9,27 @@ export default function AddVideo() {
     const {
         register,
         handleSubmit,
-        setValue,
+        watch,
         getValues,
         reset,
         formState: { errors },
     } = useForm({
         defaultValues: {
-            originalUrl: '',
-            originalVideoIDUrl: '',
-            authorName: '',
+            original_url: '',
+            original_video_id_url: '',
+            author_name: '',
             title: '',
-            thumbnailUrl: '',
+            thumbnail_url: '',
             description: '',
         },
     });
 
+    const watchedThumbnail = watch('thumbnail_url');
+
     const handleFetchVideoData = (e) => {
         e.preventDefault();
 
-        const url = getValues('originalUrl');
+        const url = getValues('original_url');
 
         if (!url) return console.warn('No hay url.');
 
@@ -38,10 +40,17 @@ export default function AddVideo() {
         const getOembedData = async () => {
             try {
                 const data = await getOEmbedDataYT(url);
-                setValue('originalVideoIDUrl', videoId);
-                setValue('authorName', data.author_name);
-                setValue('title', data.title);
-                setValue('thumbnailUrl', data.thumbnail_url);
+
+                if (!data) return console.warn('No se encontró vídeo.');
+
+                reset({
+                    original_url: url,
+                    original_video_id_url: videoId,
+                    author_name: data.author_name,
+                    title: data.title,
+                    thumbnail_url: data.thumbnail_url,
+                    description: '',
+                });
                 setShowForm(true);
 
             } catch (error) {
@@ -52,8 +61,13 @@ export default function AddVideo() {
         getOembedData();
     };
 
-    const handleAggregate = (data) => {
-        console.log('Objeto Final Enviado:', data);
+    const handleAggregate = async (data) => {
+        try {
+            console.log('Objeto a agregar -->', data);
+            // await addVideoDB(data);  // <-- Función Firebase 
+        } catch (error) {
+        } finally {
+        }
     };
 
     return (
@@ -63,12 +77,12 @@ export default function AddVideo() {
             <form onSubmit={handleFetchVideoData}>
                 <fieldset>
                     <legend>Sección de Búsqueda</legend>
-                    <label htmlFor='originalUrl'>Añadir Video:</label>
+                    <label htmlFor='original_url'>Añadir Video:</label>
                     <input
-                        id='originalUrl'
+                        id='original_url'
                         type="text"
                         placeholder="Pega el link de YouTube aquí..."
-                        {...register('originalUrl', {
+                        {...register('original_url', {
                             required: 'La URL es requerida',
                         })}
                     />
@@ -84,16 +98,15 @@ export default function AddVideo() {
                     {/* Campos no editables (Sólo lectura) */}
                     <dl>
                         <dt>ID del Video:</dt>
-                        <dd>{getValues('originalVideoIDUrl')}</dd>
+                        <dd>{getValues('original_video_id_url')}</dd>
 
                         <dt>Autor:</dt>
-                        <dd>{getValues('authorName')}</dd>
+                        <dd>{getValues('author_name')}</dd>
                     </dl>
 
                     {/* Formulario Principal */}
                     <form onSubmit={handleSubmit(handleAggregate)}>
 
-                        {/* Campos editables */}
                         <label htmlFor='videoTitle'>Título:</label>
                         <input
                             type='text'
@@ -101,15 +114,15 @@ export default function AddVideo() {
                             {...register('title', { required: true })}
                         />
 
-                        <label htmlFor='thumbnailUrl'>URL Portada:</label>
+                        <label htmlFor='thumbnail_url'>URL Portada:</label>
                         <input
                             type='text'
-                            id='thumbnailUrl'
-                            {...register('thumbnailUrl')}
+                            id='thumbnail_url'
+                            {...register('thumbnail_url')}
                         />
                         {/* Pequeña previsualización si hay URL */}
-                        {getValues('thumbnailUrl') && (
-                            <img src={getValues('thumbnailUrl')} alt="Thumb" />
+                        {watchedThumbnail && (
+                            <img src={watchedThumbnail} alt="Thumb" />
                         )}
 
                         <label >Notas Personales (Descripción):</label>

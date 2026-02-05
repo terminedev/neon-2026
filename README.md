@@ -4,38 +4,39 @@
 ### Estructura de Datos (Firestore):
 
 1. **Colección `videos`:**
-* `videoId` (ID del documento, autogenerado)
-* `userId` (ID del usuario dueño)
-* `originalUrl` (Link de YouTube - *No editable*)
-* `originalVideoIDUrl` (ID del vídeo de YouTube - *No editable*)
-* `authorName` (Canal de YouTube - *No editable*)
+* `video_id` (ID del documento, autogenerado)
+* `user_id` (ID del usuario dueño)
+* `original_url` (Link de YouTube - *No editable*)
+* `original_video_id_url` (ID del vídeo de YouTube - *No editable*)
+* `author_name` (Canal de YouTube - *No editable*)
 * `title` (Título - **Editable**)
-* `thumbnailUrl` (Portada - **Editable**)
+* `thumbnail_url` (Portada - **Editable**)
 * `description` (Opcional, tus notas personales)
-* `createdAt` (Fecha que da Firebase)
+* `created_at` (Fecha que da Firebase)
 
 
 2. **Colección `playlists`:**
-* `playlistId`
-* `userId`
+* `playlist_id`
+* `user_id`
 * `name` (Nombre Playlist)
 * `description`
-* `videoIds` (Array de strings con los IDs de los videos que pertenecen a esta lista).
+* `video_ids` (Array de strings con los IDs de los videos que pertenecen a esta lista).
 
 
 ###  Estas funciones cubren el **CRUD**:
 
 * **Gestión de Videos (Entidad 1):**
 ✓ * Agregar video al sistema (Create). 
-* Listar todos los videos almacenados (Read).
-* Editar información del video (Update).
-* Eliminar video del sistema (Delete).
-* Agregar a "Favoritos" (una lista por defecto).
-* Reproductor Embebido (El "Factor Wow"): Permite ver el video sin salir de tu web. Puedes poner un reproductor flotante o uno fijo en el detalle del video.
+✓ * Listar todos los videos almacenados (Read).
+✓ * Editar información del video (Update).
+✓ * Eliminar video del sistema (Delete).
+✓ * Agregar a "Favoritos" (una lista por defecto).
+✓ * Reproductor Embebido (El "Factor Wow"): Permite ver el video sin salir de tu web. Puedes poner un reproductor flotante o uno fijo en el detalle del video.
 
 
 * **Gestión de Playlists (Entidad 2):**
 * Crear nueva playlist (Create).
+* Editar playlist (Update).
 * Listar playlists creadas (Read).
 * Ver detalle de una playlist (canciones dentro).
 * Eliminar playlist (Delete).
