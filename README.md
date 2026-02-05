@@ -19,6 +19,7 @@
 * `playlist_id`
 * `user_id`
 * `name` (Nombre Playlist)
+* `cover` (Portada Playlist)
 * `description`
 * `video_ids` (Array de strings con los IDs de los videos que pertenecen a esta lista).
 
@@ -35,7 +36,7 @@
 
 
 * **Gestión de Playlists (Entidad 2):**
-* Crear nueva playlist (Create).
+✓ * Crear nueva playlist (Create).
 * Editar playlist (Update).
 * Listar playlists creadas (Read).
 * Ver detalle de una playlist (canciones dentro).
