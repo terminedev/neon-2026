@@ -13,4 +13,10 @@ body {
   color: var(--text-main);
   font-family: 'Segoe UI', system-ui, sans-serif;
   margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
 }

@@ -1,9 +1,36 @@
+import { db, auth } from 'services/firebase/firebase';
+import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut
+} from 'firebase/auth';
+
+import {
+    collection,
+    query,
+    where,
+    getCountFromServer,
+    addDoc,
+    serverTimestamp,
+    orderBy,
+    limit,
+    getDocs,
+    doc,
+    getDoc,
+    updateDoc,
+    arrayUnion,
+    deleteDoc,
+    arrayRemove
+} from 'firebase/firestore';
+
+
 import {
     createContext,
     useCallback,
     useContext,
     useState,
-    useMemo
+    useMemo,
+    useEffect // Te sugiero agregar este para el observador de sesión
 } from 'react';
 
 const AuthContext = createContext();
@@ -12,6 +39,13 @@ const MAX_LIMIT = 20;
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+            setUser(firebaseUser);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const loginDB = useCallback(async (email = '', password = '') => {
         try {
