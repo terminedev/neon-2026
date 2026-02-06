@@ -4,6 +4,8 @@ import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 import { useAuth } from 'contexts/AuthProvider';
 import PlaylistCard from "components/private-content/playlist/PlaylistCard";
 
+import styles from 'styles/Grid';
+
 export default function MyPlaylists() {
 
     const { getPlaylistDB } = useAuth();
@@ -48,9 +50,11 @@ export default function MyPlaylists() {
     return (
         <>
             <header>
-                <h1>Mis Playlists</h1>
-                <Link to="/crear-playlist">Crear Nueva Playlist</Link>
-            </header>
+                <div className={styles.sectionHeader}>
+                    <h1>Mis Playlists</h1>
+                    <Link to="/crear-playlist">Crear Nueva Playlist</Link>
+                </div>
+            </header >
 
             <hr />
 
@@ -61,7 +65,7 @@ export default function MyPlaylists() {
                     <p>Cargando playlists...</p>
                 ) : (
                     data.length > 0 ? (
-                        <ul>
+                        <ul className={styles.grid}>
                             {data.map(playlist => (
                                 <li key={playlist.playlist_id}>
                                     <PlaylistCard playlistData={playlist} />

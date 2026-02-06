@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import ToAddToPlaylist from "components/private-content/playlist/ToAddToPlaylist";
 import DeleteVideo from "components/private-content/video/DeleteVideo";
 
+import styles from 'styles/Card';
+
 export default function VideoCard({ videoData }) {
 
     const {
@@ -46,8 +48,8 @@ export default function VideoCard({ videoData }) {
 
     return (
         <>
-            <article>
-                <header>
+            <article className={styles.card}>
+                <header className={styles.content}>
                     <h3>{title}</h3>
                     <p>Canal: {author_name}</p>
                 </header>
@@ -55,9 +57,10 @@ export default function VideoCard({ videoData }) {
                     <img
                         src={thumbnail_url}
                         alt={`Portada de ${title}`}
+                        className={styles.thumbnail}
                     />
                 </main>
-                <footer>
+                <footer className={styles.footer}>
                     {/* <button onClick={handlePlay}>Play</button> */}
 
                     <button onClick={() => {
@@ -73,11 +76,11 @@ export default function VideoCard({ videoData }) {
                         {asynObjectAddToFav.isLoading ? '...' : 'Fav'}
                     </button> */}
 
-                    <Link to={`/editar-video/${video_id}`}>
+                    <Link to={`/editar-video/${video_id}`} className={styles.button}>
                         Editar
                     </Link>
 
-                    <button onClick={() => setShowDeleteModal(true)}>Borrar</button>
+                    <button onClick={() => setShowDeleteModal(true)} className={styles.button} style={{ background: 'var(--neon-pink)' }}>Borrar</button>
 
                     <a href={original_url} target='_blank' rel="noreferrer">Ir a Vídeo YT</a>
                 </footer>

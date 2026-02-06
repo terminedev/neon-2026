@@ -5,6 +5,8 @@ import { useAuth } from 'contexts/AuthProvider';
 import VideoCard from "components/private-content/video/VideoCard";
 import PlaylistCard from "components/private-content/playlist/PlaylistCard";
 
+import styles from 'styles/Grid';
+
 export default function Home() {
 
     const { getLatestVideos, getLatestPlaylist } = useAuth();
@@ -72,7 +74,7 @@ export default function Home() {
 
             {/* Sección Vídeos */}
             <section>
-                <header>
+                <header className={styles.sectionHeader}>
                     <h2>Tus vídeos</h2>
                     <Link to="/mis-videos">Ver más</Link>
                 </header>
@@ -82,7 +84,7 @@ export default function Home() {
                 {isLoading ? (
                     <p>Cargando vídeos...</p>
                 ) : (
-                    <ul>
+                    <ul className={styles.grid}>
                         {
                             data.videos.length > 0 ? (
                                 data.videos.map(video => (
@@ -102,7 +104,7 @@ export default function Home() {
 
             {/* Sección Playlist */}
             <section>
-                <header>
+                <header className={styles.sectionHeader}>
                     <h2>Tus playlists</h2>
                     <Link to="/mis-playlists">Ver más</Link>
                 </header>
@@ -112,7 +114,7 @@ export default function Home() {
                 {isLoading ? (
                     <p>Cargando playlists...</p>
                 ) : (
-                    <ul>
+                    <ul className={styles.grid}>
                         {
                             data.playlists.length > 0 ? (
                                 data.playlists.map(playlist => (

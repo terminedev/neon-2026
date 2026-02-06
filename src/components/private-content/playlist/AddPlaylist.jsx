@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthProvider';
 import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 
+import styles from './Form.module.css';
+
 export default function AddPlaylist() {
 
     const navigate = useNavigate();
@@ -51,42 +53,53 @@ export default function AddPlaylist() {
     };
 
     return (
-        <section>
+        <section className={styles.formWrapper}>
             <h2>Crear nueva Playlist:</h2>
             <form onSubmit={handleSubmit(handleAggregate)}>
 
-                <label htmlFor='name'>Nombre:</label>
-                <input
-                    type='text'
-                    id="name"
-                    {...register('name', { required: 'El nombre es requerido' })}
-                />
-                {errors.name && <p>*{errors.name.message}</p>}
+                <div className={styles.formGroup}>
+                    <label htmlFor='name'>Nombre:</label>
+                    <input
+                        className={styles.input}
+                        type='text'
+                        id="name"
+                        {...register('name', { required: 'El nombre es requerido' })}
+                    />
+                    {errors.name && <p>*{errors.name.message}</p>}
+                </div>
 
-                <label htmlFor='cover'>URL Portada:</label>
-                <input
-                    type='text'
-                    id='cover'
-                    {...register('cover')}
-                />
-                {/* Previsualización */}
-                {watchedCover && (
-                    <img src={watchedCover} alt="Thumb" />
-                )}
+                <div className={styles.formGroup}>
+                    <label htmlFor='cover'>URL Portada:</label>
+                    <input
+                        className={styles.input}
+                        type='text'
+                        id='cover'
+                        {...register('cover')}
+                    />
+                    {/* Previsualización */}
+                    {watchedCover && (
+                        <img src={watchedCover} alt="Thumb" />
+                    )}
+                </div>
 
-                <label htmlFor='color'>Color:</label>
-                <input
-                    type='color'
-                    id="color"
-                    {...register('color')}
-                />
+                <div className={styles.formGroup}>
+                    <label htmlFor='color'>Color:</label>
+                    <input
+                        className={styles.input}
+                        type='color'
+                        id="color"
+                        {...register('color')}
+                    />
+                </div>
 
-                <label>Notas Personales (Descripción):</label>
-                <textarea
-                    {...register('description')}
-                    rows="4"
-                    placeholder="Escribe tus notas aquí..."
-                />
+                <div className={styles.formGroup}>
+                    <label>Notas Personales (Descripción):</label>
+                    <textarea
+                        {...register('description')}
+                        rows="4"
+                        placeholder="Escribe tus notas aquí..."
+                    />
+                </div>
 
                 {/* Mostrar Error de Firebase si existe */}
                 {asynObjectAddPlaylist.error && (
@@ -101,6 +114,7 @@ export default function AddPlaylist() {
                         :
                         <>
                             <button
+                                className={styles.button}
                                 type="button"
                                 onClick={() => reset()}
                             >
@@ -108,6 +122,7 @@ export default function AddPlaylist() {
                             </button>
 
                             <button
+                                className={styles.button}
                                 type="submit"
                             >
                                 Guardar Playlist

@@ -1,23 +1,20 @@
 import { Link, Outlet } from "react-router-dom";
 import { Logout } from 'components/public-content/access/Logout';
+import styles from 'styles/Layout';
 
 export default function Layout() {
-
     return (
-        <>
-            <header>
+        <div className={styles.container}>
+            <header className={styles.header}>
                 <Link to="/">Home</Link>
-                {/* <Seeker onSearch={handleSearch} /> */}
                 <h1>Proyecto Neón</h1>
-                <Logout />
+                <div className={styles.navLinks}>
+                    <Logout />
+                </div>
             </header>
-
             <main>
                 <Outlet />
             </main>
-
-            <footer>
-            </footer>
-        </>
+        </div>
     );
-};
+}

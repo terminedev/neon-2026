@@ -5,6 +5,8 @@ import { getOEmbedDataYT, extractVideoID } from 'services/YTOEmbed';
 import { useAuth } from 'contexts/AuthProvider';
 import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 
+import styles from './Form.module.css';
+
 export default function AddVideo() {
 
     const [showForm, setShowForm] = useState(false);
@@ -96,14 +98,15 @@ export default function AddVideo() {
     };
 
     return (
-        <section>
+        <section className={styles.formWrapper}>
 
             {/* Sección de Búsqueda */}
             <form onSubmit={handleFetchVideoData}>
-                <fieldset>
+                <fieldset className={styles.formGroup}>
                     <legend>Sección de Búsqueda</legend>
                     <label htmlFor='original_url'>Añadir Video:</label>
                     <input
+                        className={styles.input}
                         id='original_url'
                         type="text"
                         placeholder="Pega el link de YouTube aquí..."
@@ -113,7 +116,7 @@ export default function AddVideo() {
                     />
                     {errors.original_url && <p>*{errors.original_url.message}</p>}
                     {
-                        asynObjectFetchVideoData.isLoading ? <p>Logueándose...</p> : <button type="submit">Obtener vídeo</button>
+                        asynObjectFetchVideoData.isLoading ? <p>Logueándose...</p> : <button className={styles.button} type="submit">Obtener vídeo</button>
                     }
                 </fieldset>
 
@@ -137,32 +140,40 @@ export default function AddVideo() {
                     {/* Formulario Principal */}
                     <form onSubmit={handleSubmit(handleAggregate)}>
 
-                        <label htmlFor='title'>Título:</label>
-                        <input
-                            type='text'
-                            id="title"
-                            {...register('title', { required: true })}
-                        />
-                        {errors.title && <p>*{errors.title.message}</p>}
+                        <div className={styles.formGroup}>
+                            <label htmlFor='title'>Título:</label>
+                            <input
+                                className={styles.input}
+                                type='text'
+                                id="title"
+                                {...register('title', { required: true })}
+                            />
+                            {errors.title && <p>*{errors.title.message}</p>}
+                        </div>
 
-                        <label htmlFor='thumbnail_url'>URL Portada:</label>
-                        <input
-                            type='text'
-                            id='thumbnail_url'
-                            {...register('thumbnail_url')}
-                        />
-                        {errors.thumbnail_url && <p>*{errors.thumbnail_url.message}</p>}
-                        {/* Pequeña previsualización si hay URL */}
-                        {watchedThumbnail && (
-                            <img src={watchedThumbnail} alt="Thumb" />
-                        )}
+                        <div className={styles.formGroup}>
+                            <label htmlFor='thumbnail_url'>URL Portada:</label>
+                            <input
+                                className={styles.input}
+                                type='text'
+                                id='thumbnail_url'
+                                {...register('thumbnail_url')}
+                            />
+                            {errors.thumbnail_url && <p>*{errors.thumbnail_url.message}</p>}
+                            {/* Pequeña previsualización si hay URL */}
+                            {watchedThumbnail && (
+                                <img src={watchedThumbnail} alt="Thumb" />
+                            )}
+                        </div>
 
-                        <label >Notas Personales (Descripción):</label>
-                        <textarea
-                            {...register('description')}
-                            rows="4"
-                            placeholder="Escribe tus notas aquí..."
-                        />
+                        <div className={styles.formGroup}>
+                            <label >Notas Personales (Descripción):</label>
+                            <textarea
+                                {...register('description')}
+                                rows="4"
+                                placeholder="Escribe tus notas aquí..."
+                            />
+                        </div>
 
                         {asynObjectAddVideo.error && <p>*{getFirebaseErrorMessage(asynObjectAddVideo.error.code)}</p>}
 
@@ -171,7 +182,7 @@ export default function AddVideo() {
                                 ? <p>Agregando vídeo...</p>
                                 :
                                 <>
-                                    <button type="button" onClick={() => reset({
+                                    <button type="button" className={styles.button} onClick={() => reset({
                                         original_url: asynObjectFetchVideoData.data.url,
                                         original_video_id_url: asynObjectFetchVideoData.videoId,
                                         author_name: asynObjectFetchVideoData.data.author_name,
@@ -181,7 +192,7 @@ export default function AddVideo() {
                                     })}>
                                         Restaurar Datos
                                     </button>
-                                    <button type="submit">
+                                    <button className={styles.button} type="submit">
                                         Guardar Video
                                     </button>
                                 </>

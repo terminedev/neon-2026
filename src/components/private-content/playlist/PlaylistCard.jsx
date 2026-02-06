@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import DeletePlaylist from "components/private-content/playlist/DeletePlaylist";
 
+import styles from 'styles/Card';
+
 export default function PlaylistCard({ playlistData }) {
 
     const {
@@ -14,26 +16,27 @@ export default function PlaylistCard({ playlistData }) {
 
     return (
         <>
-            <article>
-                <header>
+            <article className={styles.card}>
+                <header className={styles.content}>
                     <h3>{name}</h3>
                 </header>
                 <main>
                     <img
                         src={cover}
                         alt={`Portada de ${name}`}
+                        className={styles.thumbnail}
                     />
                 </main>
-                <footer>
-                    <Link to={`/playlist/${playlist_id}`}>
+                <footer className={styles.footer}>
+                    <Link to={`/playlist/${playlist_id}`} className={styles.button}>
                         Play
                     </Link>
 
-                    <Link to={`/editar-playlist/${playlist_id}`}>
+                    <Link to={`/editar-playlist/${playlist_id}`} className={styles.button}>
                         Editar
                     </Link>
 
-                    <button onClick={() => setShowDeleteModal(true)}>
+                    <button onClick={() => setShowDeleteModal(true)} className={styles.button} style={{ background: 'var(--neon-pink)' }}>
                         Borrar
                     </button>
                 </footer>

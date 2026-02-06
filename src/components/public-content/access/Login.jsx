@@ -3,6 +3,8 @@ import { useAuth } from 'contexts/AuthProvider';
 import { useNavigate } from "react-router-dom";
 import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 
+import styles from 'styles/Form';
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -35,33 +37,38 @@ export default function Login() {
     };
 
     return (
-        <section>
+        <section className={styles.formWrapper}>
             <h2>Iniciar Sesión</h2>
             <form onSubmit={handleLogin}>
-                <label htmlFor="email">Correo Eléctonico: </label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="email@ejemplo.com"
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+                <div className={styles.formGroup}>
+                    <label htmlFor="email">Correo Eléctonico: </label>
+                    <input
+                        className={styles.input}
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="email@ejemplo.com"
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
 
                 <hr />
-
-                <label htmlFor="password">Contraseña: </label>
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Contraseña"
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className={styles.formGroup}>
+                    <label htmlFor="password">Contraseña: </label>
+                    <input
+                        className={styles.input}
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Contraseña"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
 
                 {asynObject.error && <p>*{getFirebaseErrorMessage(asynObject.error.code)}</p>}
 
                 {
-                    asynObject.isLoading ? <p>Logueándose...</p> : <button type="submit">Entrar</button>
+                    asynObject.isLoading ? <p>Logueándose...</p> : <button type="submit" className={styles.button}>Entrar</button>
                 }
             </form>
         </section>

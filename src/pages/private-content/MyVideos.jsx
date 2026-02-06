@@ -48,7 +48,7 @@ export default function MyVideos() {
 
     return (
         <>
-            <header>
+            <header className={styles.sectionHeader}>
                 <h1>Mis Vídeos</h1>
                 <Link to="/agregar-video">Agregar Nuevo Vídeo</Link>
             </header>
@@ -62,7 +62,7 @@ export default function MyVideos() {
                     <p>Cargando biblioteca de vídeos...</p>
                 ) : (
                     data.length > 0 ? (
-                        <ul>
+                        <ul className={styles.grid}>
                             {data.map(video => (
                                 <li key={video.video_id}>
                                     <VideoCard videoData={video} />
