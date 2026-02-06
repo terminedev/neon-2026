@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { getOEmbedDataYT, extractVideoID } from 'services/YTOEmbed';
+import { useAuth } from 'contexts/AuthProvider';
+import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 
 export default function AddVideo() {
 
     const [showForm, setShowForm] = useState(false);
     const { navigate } = useNavigate();
+    const { addVideoDB } = useAuth();
 
     const [asynObjectFetchVideoData, setAsynObjectFetchVideoData] = useState({
-        data: null,
         isLoading: false,
         error: null
     });
@@ -54,7 +56,7 @@ export default function AddVideo() {
         if (!videoId) return console.warn('URL de YouTube no válida')
 
         try {
-            setAsynObjectFetchVideoData({ data: null, isLoading: true, error: null });
+            setAsynObjectFetchVideoData({ isLoading: true, error: null });
 
             const data = await getOEmbedDataYT(url);
 
@@ -69,10 +71,10 @@ export default function AddVideo() {
 
             setShowForm(true);
 
-            setAsynObjectFetchVideoData({ data: data, isLoading: false, error: null });
+            setAsynObjectFetchVideoData({ isLoading: false, error: null });
 
         } catch (error) {
-            setAsynObjectFetchVideoData({ data: null, isLoading: false, error: error });
+            setAsynObjectFetchVideoData({ isLoading: false, error: error });
         }
     };
 
@@ -108,12 +110,13 @@ export default function AddVideo() {
                             required: 'La URL es requerida',
                         })}
                     />
-
+                    {errors.original_url && <p>*{errors.original_url.message}</p>}
                     {
-                        asynObject.isLoading ? <p>Logueándose...</p> : <button type="submit">Entrar</button>
+                        asynObjectFetchVideoData.isLoading ? <p>Logueándose...</p> : <button type="submit">Obtener vídeo</button>
                     }
-                    <button type='submit'>Obtener vídeo</button>
                 </fieldset>
+
+                {asynObjectFetchVideoData.error && <p>*{getFirebaseErrorMessage(asynObjectFetchVideoData.error.code)}</p>}
             </form>
 
             {/* Mostrar formulario principal si hay resultado */}
@@ -133,12 +136,13 @@ export default function AddVideo() {
                     {/* Formulario Principal */}
                     <form onSubmit={handleSubmit(handleAggregate)}>
 
-                        <label htmlFor='videoTitle'>Título:</label>
+                        <label htmlFor='title'>Título:</label>
                         <input
                             type='text'
-                            id="videoTitle"
+                            id="title"
                             {...register('title', { required: true })}
                         />
+                        {errors.title && <p>*{errors.title.message}</p>}
 
                         <label htmlFor='thumbnail_url'>URL Portada:</label>
                         <input
@@ -146,6 +150,7 @@ export default function AddVideo() {
                             id='thumbnail_url'
                             {...register('thumbnail_url')}
                         />
+                        {errors.thumbnail_url && <p>*{errors.thumbnail_url.message}</p>}
                         {/* Pequeña previsualización si hay URL */}
                         {watchedThumbnail && (
                             <img src={watchedThumbnail} alt="Thumb" />
@@ -158,15 +163,32 @@ export default function AddVideo() {
                             placeholder="Escribe tus notas aquí..."
                         />
 
-                        <button type="button" onClick={() => reset()}>
-                            Restaurar Datos
-                        </button>
-                        <button type="submit">
-                            Guardar Video
-                        </button>
+                        {asynObjectAddVideo.error && <p>*{getFirebaseErrorMessage(asynObjectAddVideo.error.code)}</p>}
+
+                        {
+                            asynObjectAddVideo.isLoading
+                                ? <p>Agregando vídeo...</p>
+                                :
+                                <>
+                                    <button type="button" onClick={() => reset({
+                                        original_url: url,
+                                        original_video_id_url: videoId,
+                                        author_name: data.author_name,
+                                        title: data.title,
+                                        thumbnail_url: data.thumbnail_url,
+                                        description: '',
+                                    })}>
+                                        Restaurar Datos
+                                    </button>
+                                    <button type="submit">
+                                        Guardar Video
+                                    </button>
+                                </>
+                        }
+
                     </form>
                 </>
             }
-        </section>
+        </section >
     );
 };

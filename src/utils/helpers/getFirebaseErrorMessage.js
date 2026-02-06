@@ -71,6 +71,35 @@ export const getFirebaseErrorMessage = (errorCode) => {
         case 'auth/user-signed-out':
             return 'El usuario ha cerrado la sesión.';
 
+        // --- FIRESTORE (Base de Datos / addDoc) ---
+
+        case 'permission-denied':
+            return 'No tienes permisos para realizar esta acción (Reglas de seguridad).';
+
+        case 'resource-exhausted':
+            return 'Se ha superado la cuota de uso o el límite de almacenamiento.';
+
+        case 'cancelled':
+            return 'La operación fue cancelada.';
+
+        case 'data-loss':
+            return 'Hubo una pérdida de datos irrecuperable.';
+
+        case 'deadline-exceeded':
+            return 'La operación tardó demasiado tiempo en responder. Revisa tu conexión.';
+
+        case 'aborted':
+            return 'La operación fue abortada (posible conflicto con otra transacción).';
+
+        case 'out-of-range':
+            return 'Se intentó guardar un valor fuera del rango válido.';
+
+        case 'failed-precondition':
+            return 'Error de requisitos previos (posible falta de índice o estado inválido).';
+
+        case 'invalid-argument':
+            return 'Se enviaron datos inválidos o incorrectos a la base de datos.';
+
         // --- DEFAULT (Fallback) ---
         default:
             console.warn('Error de Firebase no controlado:', errorCode);

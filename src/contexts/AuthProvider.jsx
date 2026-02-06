@@ -54,6 +54,23 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
+    const addVideoDB = useCallback(async (dataToAdd) => {
+        if (!user) throw new Error("Usuario no autenticado");
+
+        try {
+            await addDoc(collection(db, 'videos'), {
+                user_id: user.uid,
+                created_at: serverTimestamp(),
+                ...dataToAdd
+            });
+
+            return { success: true };
+        } catch (error) {
+            console.error("Error al agregar vídeo:", error.code, error.message);
+            throw error;
+        }
+    }, [user]);
+
 
     // --------------------------------------
 
@@ -62,12 +79,15 @@ export function AuthProvider({ children }) {
         setUser,
         loginDB,
         registerDB,
-        logout
+        logout,
+        addVideoDB
     }), [user,
         setUser,
         loginDB,
         registerDB,
-        logout]);
+        logout,
+        addVideoDB
+    ]);
 
     return (
         <AuthContext.Provider value={contextValue}>
