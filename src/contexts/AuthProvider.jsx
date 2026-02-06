@@ -71,6 +71,23 @@ export function AuthProvider({ children }) {
         }
     }, [user]);
 
+    const addPlaylistDB = useCallback(async (dataToAdd) => {
+        if (!user) throw new Error("Usuario no autenticado");
+
+        try {
+            await addDoc(collection(db, 'playlists'), {
+                user_id: user.uid,
+                created_at: serverTimestamp(),
+                ...dataToAdd
+            });
+
+            return { success: true };
+        } catch (error) {
+            console.error("Error al agregar playlist:", error.code, error.message);
+            throw error;
+        }
+    }, [user]);
+
 
     // --------------------------------------
 
@@ -80,13 +97,15 @@ export function AuthProvider({ children }) {
         loginDB,
         registerDB,
         logout,
-        addVideoDB
+        addVideoDB,
+        addPlaylistDB
     }), [user,
         setUser,
         loginDB,
         registerDB,
         logout,
-        addVideoDB
+        addVideoDB,
+        addPlaylistDB
     ]);
 
     return (

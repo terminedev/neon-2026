@@ -1,6 +1,18 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from 'contexts/AuthProvider';
+import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 
 export default function AddPlaylist() {
+
+    const { navigate } = useNavigate();
+    const { addPlaylistDB } = useAuth();
+
+    const [asynObjectAddPlaylist, setAsynObjectAddPlaylist] = useState({
+        isLoading: false,
+        error: null
+    });
 
     const {
         register,
@@ -22,22 +34,24 @@ export default function AddPlaylist() {
 
     const handleAggregate = async (data) => {
         try {
-            console.log('Objeto a agregar -->', data);
+            setAsynObjectAddPlaylist({ isLoading: true, error: null });
 
-            await addPlaylistDB({
-                user_id: user.uid, // <-- AuthContext;
+            const response = await addPlaylistDB({
                 video_ids: [],
                 ...data
-            });  // <-- Función Firebase 
+            });
 
+            if (response.success) navigate('/');
         } catch (error) {
-        } finally {
+            setAsynObjectAddPlaylist({
+                isLoading: false,
+                error: error
+            });
         }
     };
 
     return (
         <section>
-
             <h2>Crear nueva Playlist:</h2>
             <form onSubmit={handleSubmit(handleAggregate)}>
 
@@ -45,8 +59,9 @@ export default function AddPlaylist() {
                 <input
                     type='text'
                     id="name"
-                    {...register('name', { required: true })}
+                    {...register('name', { required: 'El nombre es requerido' })}
                 />
+                {errors.name && <p>*{errors.name.message}</p>}
 
                 <label htmlFor='cover'>URL Portada:</label>
                 <input
@@ -54,7 +69,7 @@ export default function AddPlaylist() {
                     id='cover'
                     {...register('cover')}
                 />
-                {/* Pequeña previsualización si hay URL */}
+                {/* Previsualización */}
                 {watchedCover && (
                     <img src={watchedCover} alt="Thumb" />
                 )}
@@ -66,19 +81,41 @@ export default function AddPlaylist() {
                     {...register('color')}
                 />
 
-                <label >Notas Personales (Descripción):</label>
+                <label>Notas Personales (Descripción):</label>
                 <textarea
                     {...register('description')}
                     rows="4"
                     placeholder="Escribe tus notas aquí..."
                 />
 
-                <button type="button" onClick={() => reset()}>
-                    Limpiar Datos
-                </button>
-                <button type="submit">
-                    Guardar Video
-                </button>
+                {/* Mostrar Error de Firebase si existe */}
+                {asynObjectAddPlaylist.error && (
+                    <p>
+                        *{getFirebaseErrorMessage(asynObjectAddPlaylist.error.code)}
+                    </p>
+                )}
+
+                <div>
+                    {asynObjectAddPlaylist.isLoading
+                        ? <p>Guardando Playlist...</p>
+                        :
+                        <>
+                            <button
+                                type="button"
+                                onClick={() => reset()}
+                            >
+                                Limpiar Datos
+                            </button>
+
+                            <button
+                                type="submit"
+                            >
+                                Guardar Playlist
+                            </button>
+                        </>
+                    }
+                </div>
+
             </form>
         </section>
     );
