@@ -199,9 +199,105 @@ export function AuthProvider({ children }) {
         }
     }, [user]);
 
+    const getLatestPlaylist = useCallback(async () => {
+        if (!user) throw new Error("Usuario no autenticado");
+
+        try {
+            const q = query(
+                collection(db, "playlists"),
+                where("user_id", "==", user.uid),
+                orderBy('created_at', 'desc'),
+                limit(7)
+            )
+
+            const querySnapshot = await getDocs(q);
+
+            const list = [];
+
+            querySnapshot.forEach((doc) => list.push({
+                playlist_id: doc.id, // <--- Aquí estaba el error, decía video_id
+                ...doc.data()
+            }));
+
+            return list;
+        } catch (error) {
+            console.error("Error al obtener las últimas 7 playlist:", error.code, error.message);
+            throw error;
+        }
+    }, [user]);
+
+    const getPlaylistByIdDB = useCallback(async (playlist_id) => {
+        try {
+            const docRef = doc(db, "playlists", playlist_id);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                return {
+                    playlist_id: docSnap.id,
+                    ...docSnap.data()
+                }
+            } else {
+                console.log("No se encontró la playlist con ese ID");
+                return null;
+            }
+        } catch (error) {
+            console.error("Error al obtener la playlist:", error);
+            throw error;
+        }
+    }, []);
+
+    const updatePlaylistDB = useCallback(async (playlist_id, newData) => {
+        if (!user) throw new Error("Usuario no autenticado");
+
+        try {
+            const docRef = doc(db, "playlists", playlist_id);
+
+            await updateDoc(docRef, {
+                ...newData
+            });
+
+            return { success: true };
+        } catch (error) {
+            console.error("Error al actualizar la playlist:", error.code, error.message);
+            throw error;
+        }
+    }, [user]);
+
+    const removeSongFromPlaylist = useCallback(async (playlist_id, video_id) => {
+        try {
+            const docRef = doc(db, "playlists", playlist_id);
+            await updateDoc(docRef, {
+                video_ids: arrayRemove(video_id)
+            });
+            return { success: true };
+        } catch (error) {
+            console.error("Error al eliminar canción de playlist:", error);
+            throw error;
+        }
+    }, []);
+
+
     // --------------------------------------
 
     const contextValue = useMemo(() => ({
+        user,
+        setUser,
+        loginDB,
+        registerDB,
+        logout,
+        addVideoDB,
+        getLatestVideos,
+        getVideoDB,
+        updateVideoDB,
+        addPlaylistDB,
+        getPlaylistDB,
+        getLatestPlaylist,
+        getPlaylistByIdDB,
+        updatePlaylistDB,
+        deletePlaylistDB,
+        addSongToPlaylist,
+        removeSongFromPlaylist
+    }), [
         user,
         setUser,
         loginDB,
@@ -214,22 +310,12 @@ export function AuthProvider({ children }) {
         addSongToPlaylist,
         deletePlaylistDB,
         getVideoDB,
-        updateVideoDB
-    }), [user,
-        setUser,
-        loginDB,
-        registerDB,
-        logout,
-        addVideoDB,
-        addPlaylistDB,
-        getLatestVideos,
-        getPlaylistDB,
-        addSongToPlaylist,
-        deletePlaylistDB,
-        getVideoDB,
-        updateVideoDB
+        updateVideoDB,
+        getLatestPlaylist,
+        getPlaylistByIdDB,
+        updatePlaylistDB,
+        removeSongFromPlaylist
     ]);
-
     return (
         <AuthContext.Provider value={contextValue}>
             {children}

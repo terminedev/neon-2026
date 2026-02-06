@@ -1,31 +1,50 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import DeletePlaylist from "components/private-content/playlist/DeletePlaylist";
+
 export default function PlaylistCard({ playlistData }) {
 
     const {
+        playlist_id,
         name,
-        cover
+        cover,
     } = playlistData;
 
-    const handlePlay = () => { console.log("Reproducir video interno"); };
-    const handleEdit = () => { console.log("Modificar datos (título/portada)"); };
-    const handleDelete = () => { console.log("Eliminar tarjeta"); };
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     return (
-        <article>
-            <header>
-                <h3>{name}</h3>
-            </header>
-            <main>
-                <img
-                    src={cover}
-                    alt={`Portada de ${name}`}
+        <>
+            <article>
+                <header>
+                    <h3>{name}</h3>
+                </header>
+                <main>
+                    <img
+                        src={cover}
+                        alt={`Portada de ${name}`}
+                    />
+                </main>
+                <footer>
+                    <Link to={`/playlist/${id}`}>
+                        Play
+                    </Link>
+
+                    <Link to={`/editar-playlist/${id}`}>
+                        Editar
+                    </Link>
+
+                    <button onClick={() => setShowDeleteModal(true)}>
+                        Borrar
+                    </button>
+                </footer>
+            </article>
+
+            {showDeleteModal && (
+                <DeletePlaylist
+                    id={playlist_id}
+                    onClose={() => setShowDeleteModal(false)}
                 />
-            </main>
-            <footer>
-                <button onClick={handlePlay}>Play</button>
-                <button onClick={handleEdit}>Edit</button>
-                <button onClick={handleDelete}>Borrar</button>
-            </footer>
-        </article>
+            )}
+        </>
     );
 };
-
