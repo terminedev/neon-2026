@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import ToAddToPlaylist from "components/private-content/playlist/ToAddToPlaylist";
 import DeleteVideo from "components/private-content/video/DeleteVideo";
 
 import styles from 'styles/Card.module.css';

@@ -89,7 +89,7 @@ Para correr este proyecto localmente, sigue estos pasos:
 
 1. **Clonar el repositorio:**
 ```bash
-git clone https://github.com/tu-usuario/neon-2026.git
+git clone https://github.com/terminedev/neon-2026 
 
 ```
 
