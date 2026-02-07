@@ -1,64 +1,124 @@
-### Concepto: "Proyecto Neón" - Tu Biblioteca Youtube Personal.
+
+# 🌌 Proyecto Neón - Tu Biblioteca Personal de YouTube
+
+Este proyecto es el **Trabajo Final Integrador** para el curso de **Desarrollo en React JS (UTN 2026)**. Se trata de una aplicación web que permite a los usuarios gestionar su propia colección de videos de YouTube, aplicando conceptos avanzados de componentes, hooks, estado global y persistencia de datos.
+
+## 📝 Descripción General
+
+**Proyecto Neón** permite a los usuarios registrarse e iniciar sesión para acceder a un panel personal (Dashboard). En este panel, los usuarios pueden:
+
+* 
+**Agregar** videos mediante URLs de YouTube.
 
 
-### Estructura de Datos (Firestore):
-
-1. **Colección `videos`:**
-* `video_id` (ID del documento, autogenerado)
-* `user_id` (ID del usuario dueño)
-* `original_url` (Link de YouTube - *No editable*)
-* `original_video_id_url` (ID del vídeo de YouTube - *No editable*)
-* `author_name` (Canal de YouTube - *No editable*)
-* `title` (Título - **Editable**)
-* `thumbnail_url` (Portada - **Editable**)
-* `description` (Opcional, tus notas personales)
-* `created_at` (Fecha que da Firebase)
+* 
+**Visualizar** su colección personal.
 
 
-2. **Colección `playlists`:**
-* `playlist_id` (ID del documento, autogenerado)
-* `user_id` (ID del usuario dueño)
-* `name` (Nombre Playlist)
-* `cover` (Portada Playlist)
-* `description`(Opcional, tus notas personales)
-* `color` 
-* `video_ids` (Array de strings con los IDs de los videos que pertenecen a esta lista).
+* 
+**Editar** metadatos como el título o la descripción.
 
 
-###  Estas funciones cubren el **CRUD**:
-
-* **Gestión de Videos (Entidad 1):**
-✓ * Agregar video al sistema (Create). 
-✓ * Listar todos los videos almacenados (Read).
-✓ * Editar información del video (Update).
-✓ * Eliminar video del sistema (Delete).
-✓ * Agregar a "Favoritos" (una lista por defecto).
-✓ * Reproductor Embebido (El "Factor Wow"): Permite ver el video sin salir de tu web. Puedes poner un reproductor flotante o uno fijo en el detalle del video.
+* 
+**Eliminar** registros de su biblioteca.
 
 
-* **Gestión de Playlists (Entidad 2):**
-✓ * Crear nueva playlist (Create).
-✓ * Editar playlist (Update).
-✓ * Listar playlists creadas (Read).
-* Ver detalle de una playlist (canciones dentro).
-✓ * Eliminar playlist (Delete).
+
+## 🚀 Tecnologías Utilizadas
+
+Para el desarrollo de esta aplicación se utilizaron las siguientes herramientas:
+
+* 
+**React JS**: Librería principal para la interfaz.
 
 
-* **Gestión de Contenido en Playlist:**
-✓ * Agregar canciones a una playlist específica.
-* Eliminar canciones de una playlist específica.
+* 
+**React Router DOM**: Para la navegación SPA y protección de rutas.
 
 
-* **Herramientas de UI/UX:**
-✓ * Buscador global por nombre (canciones y playlists).
-✓ * Ordenamiento local de listas (alfabético, fecha, etc.).
-✓ * Login / Registro / Logout (Público)
-✓ * Página estática informativa.
+* 
+**Firebase Authentication**: Gestión de usuarios y sesiones.
 
 
-* **Restricciones de Negocio:**
-✓ * Límite global: 7000 canciones.
-✓ * Límite global: 1000 playlists.
-✓ * Límite por playlist: 1000 canciones.
-✓ * Paginación o "Cargar más": Implementar una paginación (de 20 en 20) o un botón "Ver más" es casi obligatorio técnicamente para esos volúmenes.
+* 
+**Firebase Firestore**: Base de datos NoSQL para el almacenamiento del CRUD.
 
+
+* 
+**CSS Nativo**: Estilos personalizados utilizando Flexbox y Grid sin frameworks externos.
+
+
+
+## 📂 Estructura del Proyecto
+
+El proyecto está organizado de manera modular para separar la lógica de la interfaz:
+
+* `src/components`: Componentes reutilizables (Botones, Formularios, Cards).
+* 
+`src/contexts`: Contiene el **AuthContext** para el manejo global de la sesión.
+
+
+* `src/pages`: Vistas principales de la aplicación (Login, Registro, Dashboard, About).
+* `src/services`: Configuración de Firebase y funciones de base de datos.
+* 
+`src/styles`: Archivos de CSS nativo.
+
+
+* 
+`src/routes`: Definición de rutas públicas y privadas.
+
+
+
+## 🔐 Manejo del AuthContext y Sesión
+
+El corazón de la aplicación es el `AuthContext`. Este proveedor global:
+
+1. Escucha el estado de autenticación de Firebase.
+
+
+2. Provee la información del usuario a toda la aplicación.
+
+
+3. Permite proteger las rutas del **Dashboard**, redirigiendo a usuarios no autenticados a la página de Login.
+
+
+
+## 🛠️ Instalación y Ejecución
+
+Para correr este proyecto localmente, sigue estos pasos:
+
+1. **Clonar el repositorio:**
+```bash
+git clone https://github.com/tu-usuario/neon-2026.git
+
+```
+
+
+2. **Instalar dependencias:**
+```bash
+npm install
+
+```
+
+
+3. **Configurar Firebase:**
+* Crea un proyecto en [Firebase Console](https://console.firebase.google.com/).
+* Copia tus credenciales en un archivo `.env` o directamente en el archivo de configuración de Firebase.
+
+
+4. **Iniciar la aplicación:**
+```bash
+npm start
+
+```
+
+
+
+## ⚠️ Consideraciones sobre el Desarrollo
+
+Debido a los tiempos de entrega, el proyecto se centró en ofrecer una experiencia de usuario robusta y funcional (MVP). Se implementó un límite de **20 videos por usuario** para garantizar un rendimiento óptimo en la sincronización con Firestore. Se ha mantenido código estructurado para futuras implementaciones, como el sistema de listas de reproducción y filtrado avanzado.
+
+---
+
+**Desarrollado por:** Gastøn Términe ♱
+**Curso:** React JS UTN
