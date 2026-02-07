@@ -7,7 +7,7 @@ export default function ToAddToPlaylist({
     onClose
 }) {
 
-    const { getPlaylistDB, addSongToPlaylist } = useAuth();
+    const { user, getPlaylistDB, addSongToPlaylist } = useAuth();
 
     const [asyncFetchPlaylists, setAsyncFetchPlaylists] = useState({
         data: [],
@@ -21,6 +21,7 @@ export default function ToAddToPlaylist({
     });
 
     useEffect(() => {
+        if (!user) return;
         const getPlaylist = async () => {
 
             try {

@@ -39,13 +39,16 @@ const MAX_LIMIT = 20;
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true); // <--- NUEVO
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
             setUser(firebaseUser);
+            setAuthLoading(false);
         });
         return () => unsubscribe();
     }, []);
+
 
     const loginDB = useCallback(async (email = '', password = '') => {
         try {
@@ -53,7 +56,6 @@ export function AuthProvider({ children }) {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
             const user = userCredential.user;
-
             setUser(user);
 
             return { success: true };
@@ -428,7 +430,8 @@ export function AuthProvider({ children }) {
         addSongToPlaylist,
         removeSongFromPlaylist,
         getAllVideos,
-        getVideosAccordingToPlaylist
+        getVideosAccordingToPlaylist,
+        authLoading
     }), [
         user,
         setUser,
@@ -448,7 +451,8 @@ export function AuthProvider({ children }) {
         updatePlaylistDB,
         removeSongFromPlaylist,
         getAllVideos,
-        getVideosAccordingToPlaylist
+        getVideosAccordingToPlaylist,
+        authLoading
     ]);
     return (
         <AuthContext.Provider value={contextValue}>

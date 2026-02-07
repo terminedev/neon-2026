@@ -11,7 +11,7 @@ export default function Home() {
 
     document.title = "Home | Proyecto Neón | Gastøn ♱érmine";
 
-    const { getLatestVideos, getLatestPlaylist } = useAuth();
+    const { user, getLatestVideos, getLatestPlaylist } = useAuth();
 
     const [asyncHomeData, setAsyncHomeData] = useState({
         data: {
@@ -23,6 +23,7 @@ export default function Home() {
     });
 
     useEffect(() => {
+        if (!user) return;
 
         const fetchData = async () => {
             try {

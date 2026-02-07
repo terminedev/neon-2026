@@ -10,7 +10,7 @@ export default function MyPlaylists() {
 
     document.title = "Mis Playlists | Proyecto Neón | Gastøn ♱érmine";
 
-    const { getPlaylistDB } = useAuth();
+    const { user, getPlaylistDB } = useAuth();
 
     const [asyncPlaylistsData, setAsyncPlaylistsData] = useState({
         data: [],
@@ -19,6 +19,8 @@ export default function MyPlaylists() {
     });
 
     useEffect(() => {
+        if (!user) return;
+
         const fetchData = async () => {
             try {
                 setAsyncPlaylistsData({

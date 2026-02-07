@@ -8,7 +8,7 @@ export default function MyVideos() {
 
     document.title = "Mis Vídeos | Proyecto Neón | Gastøn ♱érmine";
 
-    const { getAllVideos } = useAuth();
+    const { user, getAllVideos } = useAuth();
 
     const [asyncVideosData, setAsyncVideosData] = useState({
         data: [],
@@ -17,6 +17,8 @@ export default function MyVideos() {
     });
 
     useEffect(() => {
+        if (!user) return;
+
         const fetchData = async () => {
             try {
                 setAsyncVideosData({

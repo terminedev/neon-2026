@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { getFirebaseErrorMessage } from 'utils/helpers/getFirebaseErrorMessage';
 import { useAuth } from 'contexts/AuthProvider';
+
+import styles from 'styles/Form.module.css';
 
 export default function EditPlaylist() {
 
     document.title = "Editar Playlist | Proyecto Neón | Gastøn ♱érmine";
 
     const { playlist_id } = useParams();
-    const { getPlaylistDB, updatePlaylistDB } = useAuth();
+    const { user, getPlaylistDB, updatePlaylistDB } = useAuth();
+    const navigate = useNavigate();
 
     const [asynObjectFetchPlaylist, setAsynObjectFetchPlaylist] = useState({
         isLoading: false,
@@ -40,6 +43,8 @@ export default function EditPlaylist() {
     const watchedCover = watch('cover');
 
     useEffect(() => {
+        if (!user) return;
+
         const getPlaylistDatabase = async () => {
 
             setAsynObjectFetchPlaylist({ isLoading: true, error: null, data: null });
@@ -94,7 +99,7 @@ export default function EditPlaylist() {
     };
 
     return (
-        <section>
+        <section className={styles.formWrapper}>
             <h2>Editar Información de la Playlist:</h2>
 
             {asynObjectFetchPlaylist.isLoading && <p>Cargando información de la playlist...</p>}
@@ -106,41 +111,54 @@ export default function EditPlaylist() {
             {!asynObjectFetchPlaylist.isLoading && !asynObjectFetchPlaylist.error && (
                 <form onSubmit={handleSubmit(handleChange)}>
 
-                    <label htmlFor='name'>Nombre:</label>
-                    <input
-                        type='text'
-                        id="name"
-                        {...register('name', { required: 'El nombre es requerido' })}
-                    />
-                    {errors.name && <small>*{errors.name.message}</small>}
+                    <div className={styles.formGroup}>
+                        <label htmlFor='name'>Nombre:</label>
+                        <input
+                            className={styles.input}
 
-                    <label htmlFor='cover'>URL Portada:</label>
-                    <input
-                        type='text'
-                        id='cover'
-                        {...register('cover')}
-                    />
-
-                    {watchedCover && (
-                        <img
-                            src={watchedCover}
-                            alt="Thumb"
+                            type='text'
+                            id="name"
+                            {...register('name', { required: 'El nombre es requerido' })}
                         />
-                    )}
+                        {errors.name && <small>*{errors.name.message}</small>}
+                    </div>
 
-                    <label htmlFor='color'>Color:</label>
-                    <input
-                        type='color'
-                        id="color"
-                        {...register('color')}
-                    />
+                    <div className={styles.formGroup}>
+                        <label htmlFor='cover'>URL Portada:</label>
+                        <input
+                            className={styles.input}
+                            type='text'
+                            id='cover'
+                            {...register('cover')}
+                        />
 
-                    <label>Notas Personales (Descripción):</label>
-                    <textarea
-                        {...register('description')}
-                        rows="4"
-                        placeholder="Escribe tus notas aquí..."
-                    />
+
+                        {watchedCover && (
+                            <img
+                                src={watchedCover}
+                                alt="Thumb"
+                            />
+                        )}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label htmlFor='color'>Color:</label>
+                        <input
+                            className={styles.input}
+                            type='color'
+                            id="color"
+                            {...register('color')}
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label>Notas Personales (Descripción):</label>
+                        <textarea
+                            {...register('description')}
+                            rows="4"
+                            placeholder="Escribe tus notas aquí..."
+                        />
+                    </div>
 
 
                     {asynObjectUpdatePlaylist.error &&
@@ -151,16 +169,17 @@ export default function EditPlaylist() {
 
 
                     {asynObjectUpdatePlaylist.isLoading
-                        ? <button type="button" disabled>Guardando...</button>
+                        ? <p>Guardando...</p>
                         :
                         <>
                             <button
+                                className={styles.button}
                                 type="button"
                                 onClick={handleRestore}
                             >
                                 Restaurar Datos
                             </button>
-                            <button type="submit">Guardar Cambios</button>
+                            <button type="submit" className={styles.button}>Guardar Cambios</button>
                         </>
                     }
                 </form>

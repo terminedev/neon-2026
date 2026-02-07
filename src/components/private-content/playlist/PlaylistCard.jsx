@@ -44,7 +44,7 @@ export default function PlaylistCard({ playlistData }) {
 
             {showDeleteModal && (
                 <DeletePlaylist
-                    id={playlist_id}
+                    playlistData={playlist_id}
                     onClose={() => setShowDeleteModal(false)}
                 />
             )}

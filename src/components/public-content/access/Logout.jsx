@@ -7,7 +7,7 @@ export default function Logout() {
 
     const [showMenu, setShowMenu] = useState(false);
 
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
 
     const [asynObject, setAsynObject] = useState({
@@ -39,7 +39,7 @@ export default function Logout() {
             <button
                 onClick={() => setShowMenu(prevState => !prevState)}
             >
-                Icóno log
+                {user.email}
             </button>
 
             {/* Menú desplegable (Renderizado condicional) */}

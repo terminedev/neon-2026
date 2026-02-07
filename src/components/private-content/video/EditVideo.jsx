@@ -12,7 +12,7 @@ export default function EditVideo() {
     const { video_id } = useParams();
     const navigate = useNavigate();
 
-    const { getVideoDB, updateVideoDB } = useAuth();
+    const { user, getVideoDB, updateVideoDB } = useAuth();
 
     const [asynObjectFetch, setAsynObjectFetch] = useState({
         isLoading: true,
@@ -45,6 +45,8 @@ export default function EditVideo() {
     const watchedThumbnail = watch('thumbnail_url');
 
     useEffect(() => {
+        if (!user) return;
+
         const getVideoDatabase = async () => {
 
             setAsynObjectFetch({ isLoading: true, error: null });

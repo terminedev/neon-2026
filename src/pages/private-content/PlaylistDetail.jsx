@@ -12,6 +12,7 @@ export default function PlaylistDetail() {
     const { playlist_id } = useParams();
 
     const {
+        user,
         getPlaylistByIdDB,
         getVideosAccordingToPlaylist,
         removeSongFromPlaylist
@@ -30,6 +31,7 @@ export default function PlaylistDetail() {
     });
 
     useEffect(() => {
+        if (!user) return;
         const fetchPlaylistInfo = async () => {
             try {
                 setPlaylistInfo({ data: null, isLoading: true, error: null });
